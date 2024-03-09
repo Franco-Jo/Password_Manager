@@ -6,6 +6,26 @@ import json
 
 FONT = ("Ariel", 11, "bold")
 
+# ------------------------------- LOGIN SEARCH ---------------------------------- #
+
+
+def search():
+    """Searches for login info that matches text in the search Entry box"""
+    website = web_entry.get()
+
+    try:
+        with open('data.json', 'r') as file:
+            login_data = json.load(file)
+    except FileNotFoundError:
+        messagebox.showwarning(title="hmmmmm....", message="Sorry, data file not found.")
+    else:
+        if website in login_data:
+            email = login_data[website]["email_name"]
+            passw = login_data[website]["password"]
+            messagebox.showinfo(title=website, message=f"Email: {email}\nPassword:{passw}")
+        else:
+            messagebox.showwarning(title='error', message="No information found")
+
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -87,11 +107,11 @@ email_un_lbl.grid(column=0, row=2, sticky='W')
 pass_lbl = Label(text="Password:", font=FONT)
 pass_lbl.grid(column=0, row=3, sticky='W')
 
-web_entry = Entry(width=61)
+web_entry = Entry(width=33)
 web_entry.focus()
 web_entry.grid(column=1, row=1, columnspan=2, sticky='W')
 
-email_us_entry = Entry(width=61)
+email_us_entry = Entry(width=58)
 email_us_entry.insert(0, "Jonathan.f651@gmail.com")
 email_us_entry.grid(column=1, row=2, columnspan=2, sticky='W')
 
@@ -99,9 +119,12 @@ pass_entry = Entry(width=33)
 pass_entry.grid(column=1, row=3, sticky='W')
 
 gen_btn = Button(text="Generate Password", width=15, font=FONT, command=generate_password)
-gen_btn.grid(column=2, row=3, sticky='e')
+gen_btn.grid(column=2, row=3, sticky='W')
 
 add_btn = Button(text="Add", width=36, font=FONT, command=save_password)
 add_btn.grid(column=1, row=4, columnspan=2, sticky='W')
+
+search_btn = Button(text="Search", width=15, font=FONT, command=search)
+search_btn.grid(column=2, row=1, sticky='W')
 
 window.mainloop()
